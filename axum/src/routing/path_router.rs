@@ -516,9 +516,6 @@ impl fmt::Debug for Node {
 
 #[track_caller]
 fn validate_nest_path(v7_checks: bool, path: &str) -> &str {
-    assert!(path.starts_with('/'));
-    assert!(path.len() > 1);
-
     if path.split('/').any(|segment| {
         segment.starts_with("{*") && segment.ends_with('}') && !segment.ends_with("}}")
     }) {
@@ -526,6 +523,9 @@ fn validate_nest_path(v7_checks: bool, path: &str) -> &str {
     }
 
     if v7_checks {
+        assert!(path.starts_with('/'));
+        assert!(path.len() > 1);
+        
         if path.is_empty() || path == "/" {
             panic!("Nesting at the root is no longer supported. Use fallback_service instead.");
         }
